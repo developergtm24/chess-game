@@ -1244,7 +1244,8 @@ body {
     }
 
     .move-history-panel {
-        display: none;
+        display: flex;
+        max-height: 180px;
     }
 
     .draws-row {
