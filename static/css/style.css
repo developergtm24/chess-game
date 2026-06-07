@@ -1211,9 +1211,7 @@ body {
     }
 
     .status-bar {
-        font-size: 0.7rem;
-        min-width: 120px;
-        padding: 0.3rem 0.6rem;
+        display: none;
     }
 
     .player-panel {
@@ -1246,8 +1244,7 @@ body {
     }
 
     .move-history-panel {
-        display: flex;
-        max-height: 180px;
+        display: none;
     }
 
     .draws-row {
