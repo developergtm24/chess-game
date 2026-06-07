@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnightFall Chess</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- ═══════════════════ LANDING PAGE ═══════════════════ -->
+<div id="landing-page" class="page active">
+    <div class="landing-bg">
+        <div class="bg-grid"></div>
+        <div class="bg-vignette"></div>
+    </div>
+
+    <!-- Decorative chess pieces background -->
+    <div class="bg-pieces" aria-hidden="true">
+        <span class="bg-piece p1">♔</span>
+        <span class="bg-piece p2">♛</span>
+        <span class="bg-piece p3">♜</span>
+        <span class="bg-piece p4">♝</span>
+        <span class="bg-piece p5">♞</span>
+        <span class="bg-piece p6">♟</span>
+    </div>
+
+    <div class="landing-content">
+        <div class="landing-crown" aria-hidden="true">♚</div>
+        <div class="landing-eyebrow">STRATEGY · POWER · GLORY</div>
+        <h1 class="landing-title">
+            <span class="title-line">Knight</span>
+            <span class="title-line accent">Fall</span>
+        </h1>
+        <p class="landing-subtitle">
+            The timeless game of kings, reimagined.<br>
+            <em>Every move tells a story.</em>
+        </p>
+        <div class="landing-buttons">
+            <button class="btn-primary" id="btn-friend" onclick="startGame('friend')">
+                <span class="btn-icon">⚔</span>
+                <span class="btn-text">
+                    <strong>Play vs Friend</strong>
+                    <small>2 Players · Same Device</small>
+                </span>
+            </button>
+            <button class="btn-secondary" id="btn-computer" onclick="startGame('computer')">
+                <span class="btn-icon">⚙</span>
+                <span class="btn-text">
+                    <strong>Play vs Computer</strong>
+                    <small>Challenge the Machine</small>
+                </span>
+            </button>
+        </div>
+        <div class="landing-footer">
+            <span>♟ Classical Rules &nbsp;·&nbsp; ♟ Full Move Validation &nbsp;·&nbsp; ♟ No Registration</span>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ GAME PAGE ═══════════════════ -->
+<div id="game-page" class="page">
+
+    <!-- Header -->
+    <header class="game-header">
+        <div class="header-left">
+            <button class="header-btn" onclick="goHome()" title="Home">
+                <span>♚</span> KnightFall
+            </button>
+        </div>
+        <div class="header-center">
+            <div id="status-bar" class="status-bar">
+                <span id="status-text">White's Turn</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="icon-btn" id="sound-btn" onclick="toggleSound()" title="Toggle Sound">🔊</button>
+            <button class="icon-btn" onclick="goHome()" title="Main Menu">⌂</button>
+        </div>
+    </header>
+
+    <!-- Main game layout -->
+    <main class="game-layout">
+
+        <!-- LEFT PANEL: Black player info + captured -->
+        <aside class="player-panel panel-black">
+            <div class="player-card" id="player-black">
+                <div class="player-avatar">♛</div>
+                <div class="player-info">
+                    <div class="player-name" id="black-name">Black</div>
+                    <div class="player-score-label">Score</div>
+                    <div class="player-score" id="black-score">0</div>
+                </div>
+                <div class="turn-indicator" id="black-turn-dot"></div>
+            </div>
+            <div class="captured-section">
+                <div class="captured-label">Captured</div>
+                <div class="captured-pieces" id="captured-by-black"></div>
+                <div class="material-adv" id="material-black"></div>
+            </div>
+        </aside>
+
+        <!-- CENTER: Board -->
+        <section class="board-section">
+            <div class="board-wrapper">
+                <!-- File labels top -->
+                <div class="coord-row top-coords">
+                    <div class="coord-cell corner"></div>
+                    <div class="coord-cell">a</div>
+                    <div class="coord-cell">b</div>
+                    <div class="coord-cell">c</div>
+                    <div class="coord-cell">d</div>
+                    <div class="coord-cell">e</div>
+                    <div class="coord-cell">f</div>
+                    <div class="coord-cell">g</div>
+                    <div class="coord-cell">h</div>
+                    <div class="coord-cell corner"></div>
+                </div>
+
+                <div class="board-row-wrapper">
+                    <!-- Rank labels left -->
+                    <div class="rank-labels left-labels" id="rank-labels-left">
+                        <div class="rank-label">8</div>
+                        <div class="rank-label">7</div>
+                        <div class="rank-label">6</div>
+                        <div class="rank-label">5</div>
+                        <div class="rank-label">4</div>
+                        <div class="rank-label">3</div>
+                        <div class="rank-label">2</div>
+                        <div class="rank-label">1</div>
+                    </div>
+
+                    <!-- Chess board -->
+                    <div id="chess-board" class="chess-board"></div>
+
+                    <!-- Rank labels right -->
+                    <div class="rank-labels right-labels">
+                        <div class="rank-label">8</div>
+                        <div class="rank-label">7</div>
+                        <div class="rank-label">6</div>
+                        <div class="rank-label">5</div>
+                        <div class="rank-label">4</div>
+                        <div class="rank-label">3</div>
+                        <div class="rank-label">2</div>
+                        <div class="rank-label">1</div>
+                    </div>
+                </div>
+
+                <!-- File labels bottom -->
+                <div class="coord-row bottom-coords">
+                    <div class="coord-cell corner"></div>
+                    <div class="coord-cell">a</div>
+                    <div class="coord-cell">b</div>
+                    <div class="coord-cell">c</div>
+                    <div class="coord-cell">d</div>
+                    <div class="coord-cell">e</div>
+                    <div class="coord-cell">f</div>
+                    <div class="coord-cell">g</div>
+                    <div class="coord-cell">h</div>
+                    <div class="coord-cell corner"></div>
+                </div>
+            </div>
+
+            <!-- Mobile captured (shown below board on small screens) -->
+            <div class="mobile-captured">
+                <div class="mc-row">
+                    <span class="mc-label">Black captured:</span>
+                    <span class="mc-pieces" id="mob-captured-black"></span>
+                </div>
+                <div class="mc-row">
+                    <span class="mc-label">White captured:</span>
+                    <span class="mc-pieces" id="mob-captured-white"></span>
+                </div>
+            </div>
+
+            <!-- Controls below board -->
+            <div class="board-controls">
+                <button class="ctrl-btn" onclick="undoMove()" title="Undo last move">
+                    ↩ Undo
+                </button>
+                <button class="ctrl-btn ctrl-danger" onclick="restartGame()" title="Restart current game">
+                    ↺ Restart
+                </button>
+                <button class="ctrl-btn ctrl-new" onclick="newGame()" title="New game (back to menu)">
+                    ⊕ New Game
+                </button>
+            </div>
+        </section>
+
+        <!-- RIGHT PANEL: White player info + move history -->
+        <aside class="player-panel panel-white">
+            <div class="player-card" id="player-white">
+                <div class="player-avatar">♙</div>
+                <div class="player-info">
+                    <div class="player-name" id="white-name">White</div>
+                    <div class="player-score-label">Score</div>
+                    <div class="player-score" id="white-score">0</div>
+                </div>
+                <div class="turn-indicator" id="white-turn-dot"></div>
+            </div>
+            <div class="captured-section">
+                <div class="captured-label">Captured</div>
+                <div class="captured-pieces" id="captured-by-white"></div>
+                <div class="material-adv" id="material-white"></div>
+            </div>
+            <div class="move-history-panel">
+                <div class="panel-header">Move History</div>
+                <div class="move-list" id="move-list"></div>
+            </div>
+            <div class="draws-row">
+                <span class="draws-label">Draws:</span>
+                <span class="draws-count" id="draws-score">0</span>
+            </div>
+        </aside>
+
+    </main>
+</div>
+
+<!-- ═══════════════════ PROMOTION MODAL ═══════════════════ -->
+<div id="promotion-modal" class="modal-overlay hidden">
+    <div class="modal-box promotion-box">
+        <div class="modal-title">Choose Promotion</div>
+        <div class="promo-pieces" id="promo-pieces"></div>
+    </div>
+</div>
+
+<!-- ═══════════════════ GAME OVER MODAL ═══════════════════ -->
+<div id="gameover-modal" class="modal-overlay hidden">
+    <div class="modal-box gameover-box">
+        <div class="gameover-icon" id="gameover-icon">♔</div>
+        <div class="gameover-title" id="gameover-title">Checkmate!</div>
+        <div class="gameover-subtitle" id="gameover-subtitle">White wins the match</div>
+        <div class="gameover-scores">
+            <div class="gs-item">
+                <div class="gs-label">White</div>
+                <div class="gs-score" id="go-white-score">0</div>
+            </div>
+            <div class="gs-divider">—</div>
+            <div class="gs-item">
+                <div class="gs-label">Draws</div>
+                <div class="gs-score" id="go-draws-score">0</div>
+            </div>
+            <div class="gs-divider">—</div>
+            <div class="gs-item">
+                <div class="gs-label">Black</div>
+                <div class="gs-score" id="go-black-score">0</div>
+            </div>
+        </div>
+        <div class="gameover-btns">
+            <button class="btn-modal-primary" onclick="playAgain()">Play Again</button>
+            <button class="btn-modal-secondary" onclick="goHome()">Main Menu</button>
+        </div>
+    </div>
+</div>
+
+<!-- <script src="{{ url_for('static', filename='js/sounds.js') }}"></script> -->
+<script src="{{ url_for('static', filename='js/game.js') }}"></script>
+</body>
+</html>
